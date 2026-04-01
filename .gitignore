@@ -1,0 +1,16 @@
+**/node_modules
+
+**/dist
+**/build
+
+.turbo
+
+**/*.tsbuildinfo
+
+.env
+**/.env
+
+**/coverage
+
+**/uploads
+**/temp
