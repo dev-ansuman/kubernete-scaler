@@ -47,5 +47,17 @@
     "turbo": "^2.8.10",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.55.0"
+  },
+  "lint-staged": {
+    "**/*.{ts,js}": [
+      "prettier --write",
+      "eslint ."
+    ],
+    "**/*.{json,css,md}": [
+      "prettier --write"
+    ],
+    "**/*.md": [
+      "prettier --write"
+    ]
   }
 }
