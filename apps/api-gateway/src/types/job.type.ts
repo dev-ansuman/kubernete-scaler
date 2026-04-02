@@ -1,20 +1,32 @@
+type JobType = 'prime-up-to' | 'bcrypt-hash' | 'sort-array';
+
+type JobPayload = {
+    limit?: number;
+    text?: string;
+    rounds?: number;
+    size?: number;
+};
+
 interface Job {
     id: string,
     status: 'pending' | 'completed' | 'failed',
-    jobType: 'prime-check',
-    input: number,
-    result: boolean | null,
+    jobType: JobType,
+    payload: JobPayload,
+    result: unknown,
+    error?: string,
     createdAt: string,
     updatedAt: string
 }
 
 interface SubmitJobRequest {
-    input: number;
+    jobType?: JobType;
+    payload?: JobPayload;
 }
 
 interface SubmitJobResponse {
     jobId: string;
     status: 'pending';
+    jobType: JobType;
 }
 
-export type { Job, SubmitJobRequest, SubmitJobResponse }
+export type { JobType, JobPayload, Job, SubmitJobRequest, SubmitJobResponse }
