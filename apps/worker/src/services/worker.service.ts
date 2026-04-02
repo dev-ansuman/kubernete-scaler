@@ -22,10 +22,6 @@ export class WorkerService {
                 jobProcessingTime.observe(duration);
                 jobsProcessed.inc();
 
-                await redis.incr("total_jobs_completed");
-                await redis.incr("processing_count");
-                await redis.incrbyfloat("total_processing_time", duration);
-
                 await redis.set(
                     `job.${jobData.id}`,
                     JSON.stringify({
