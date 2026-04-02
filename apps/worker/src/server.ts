@@ -1,7 +1,16 @@
+import env from 'dotenv';
+env.config();
+
+import app from './app';
 import { WorkerService } from './services/worker.service';
 
-const invokeWorker = async () => {
-    await WorkerService.startWorker();
+const PORT = process.env.PORT;
+
+const startWorker = async () => {
+    app.listen(PORT, () => {
+        console.log(`worker-service running on port ${PORT}`);
+    });
+    WorkerService.startWorker();
 }
 
-invokeWorker();
+startWorker();

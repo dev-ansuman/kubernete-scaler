@@ -1,4 +1,5 @@
 import { redis } from '../config/redis';
+import { jobsProcessed, jobProcessingTime, jobErrors } from '../metrics/metrics'
 
 export class WorkerService {
     static async startWorker() {
@@ -11,8 +12,19 @@ export class WorkerService {
 
                 const jobData = JSON.parse(result[1]);
 
+                const start = Date.now();
+
                 console.log(`Processing Job: ${jobData.id}`);
                 const output = this.isPrime(jobData.input);
+
+                const duration = (Date.now() - start) / 1000;
+
+                jobProcessingTime.observe(duration);
+                jobsProcessed.inc();
+
+                await redis.incr("total_jobs_completed");
+                await redis.incr("processing_count");
+                await redis.incrbyfloat("total_processing_time", duration);
 
                 await redis.set(
                     `job.${jobData.id}`,
@@ -27,6 +39,7 @@ export class WorkerService {
 
             } catch (error) {
                 console.error(`Worker Error: ${error}`);
+                jobErrors.inc();
             }
         }
     }
