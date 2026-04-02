@@ -2,6 +2,7 @@ import express, { Request, Response, Application } from 'express';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
+import statsRouter from './routes/stat.routes';
 
 const app: Application = express();
 
@@ -26,5 +27,7 @@ app.get('/health', (_req: Request, res: Response) => {
         currentTime: `${new Date().toISOString()}`,
     });
 });
+
+app.use('/', statsRouter);
 
 export default app;
