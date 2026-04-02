@@ -1,12 +1,13 @@
 import { redis } from '../config/redis';
 import { jobsProcessed, jobProcessingTime, jobErrors } from '../metrics/metrics'
+import { REDIS_KEYS } from '../constants/redis';
 
 export class WorkerService {
     static async startWorker() {
         console.log("Worker Started...");
         while (true) {
             try {
-                const result = await redis.brpop("job_queue", 0);
+                const result = await redis.brpop(REDIS_KEYS.JOB_QUEUE, 0);
 
                 if (!result) continue;
 
@@ -23,11 +24,12 @@ export class WorkerService {
                 jobsProcessed.inc();
 
                 await redis.set(
-                    `job.${jobData.id}`,
+                    REDIS_KEYS.jobStatus(jobData.id),
                     JSON.stringify({
                         ...jobData,
                         status: 'completed',
-                        result: output
+                        result: output,
+                        updatedAt: new Date().toISOString(),
                     })
                 );
 

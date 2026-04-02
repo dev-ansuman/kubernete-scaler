@@ -28,6 +28,6 @@ app.get('/health', (_req: Request, res: Response) => {
     });
 });
 
-app.use('/api', metricsRoutes);
+app.use('/', metricsRoutes);
 
 export default app;
