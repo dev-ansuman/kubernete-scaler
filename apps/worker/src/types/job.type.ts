@@ -13,6 +13,7 @@ interface Job {
     jobType: JobType;
     payload: JobPayload;
     result: unknown;
+    processingTimeSeconds?: number,
     error?: string;
     createdAt: string;
     updatedAt: string;

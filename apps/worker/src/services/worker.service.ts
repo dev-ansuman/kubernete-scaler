@@ -29,6 +29,7 @@ export class WorkerService {
                     ...jobData,
                     status: 'completed',
                     result: output,
+                    processingTimeSeconds: duration,
                     updatedAt: new Date().toISOString(),
                 });
 
@@ -46,12 +47,15 @@ export class WorkerService {
                     const originalJob = await redis.get(REDIS_KEYS.jobStatus(jobId));
                     if (originalJob) {
                         const parsed = JSON.parse(originalJob) as Job;
+                        const startedAt = new Date(parsed.updatedAt || parsed.createdAt).getTime();
+                        const failedDuration = Math.max((Date.now() - startedAt) / 1000, 0);
                         await redis.set(
                             REDIS_KEYS.jobStatus(jobId),
                             JSON.stringify({
                                 ...parsed,
                                 status: 'failed',
                                 error: error.message,
+                                processingTimeSeconds: failedDuration,
                                 updatedAt: new Date().toISOString(),
                             })
                         );

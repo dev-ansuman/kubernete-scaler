@@ -20,6 +20,7 @@ export class StatsController {
 
     static async getMetrics(_req: Request, res: Response) {
         try {
+            await StatsService.refreshMetrics();
             res.set('Content-Type', register.contentType);
             res.end(await register.metrics());
         } catch (_error) {
