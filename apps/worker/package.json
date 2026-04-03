@@ -1,0 +1,10 @@
+{
+    "name": "@kubernete-scaler/worker",
+    "version": "1.0.0",
+    "type": "commonjs",
+    "scripts": {
+        "dev": "tsx --watch src/server.ts",
+        "build": "esbuild src/server.ts --bundle --platform=node --format=cjs --outdir=dist --packages=external",
+        "start": "node dist/server.js"
+    }
+}
