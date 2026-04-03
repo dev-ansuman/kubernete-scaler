@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: stats-service-svc
+  namespace: monitoring-app
+  labels:
+    app: stats-service
+spec:
+  selector:
+    app: stats-service
+  ports:
+    - name: metrics
+      port: 3002
+      targetPort: 3002
+      protocol: TCP
+  type: ClusterIP
